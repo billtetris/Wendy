@@ -1,3 +1,7 @@
+//css_include "Product.cs"
+//css_include "VendingMachine.cs"
+//css_include "VendingMenu.cs"
+
 using System;
 
 namespace SimpleVending

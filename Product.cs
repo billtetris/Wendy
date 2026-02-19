@@ -16,7 +16,9 @@ namespace SimpleVending
         public string Category { get; set; }   // Категория
         
         // TODO 1: Добавить свойство ExpiryDate типа DateTime
-        
+        // Срок годности
+        public DateTime ExpiryDate { get; set; }
+
         public Product(int code, string name, decimal price, int quantity, string category)
         {
             Code = code;
@@ -64,7 +66,7 @@ namespace SimpleVending
                 expiryStatus = $" [СКОРО: {daysLeft} дн.]";
             }
             
-            return $"{Code}. {Name} - {Price} руб. ({Quantity} шт.){expiryStatus}"; // Переопределение ToString()
+            return $"{Code}. {Name} - {Price} руб. ({Quantity} шт.){expiryStatus}";
         }
         
         // TODO 1: Реализовать метод проверки срока годности

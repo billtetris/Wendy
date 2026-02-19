@@ -73,7 +73,7 @@ namespace SimpleVending
                 return;
             }
             
-            var product = machine.GetProductByCode(code);
+            Product? product = machine.GetProductByCode(code);
             if (product == null)
             {
                 Console.WriteLine("Товар не найден!");
@@ -105,7 +105,7 @@ namespace SimpleVending
         public void AdminMenu()
         {
             Console.Write("Введите пароль: ");
-            string password = Console.ReadLine();
+            string? password = Console.ReadLine();
             
             if (password == "1234")
             {
@@ -122,7 +122,7 @@ namespace SimpleVending
                     Console.WriteLine("5. Выйти");
                     Console.Write("Выберите: ");
                     
-                    string choice = Console.ReadLine();
+                    string? choice = Console.ReadLine();
                     
                     switch (choice)
                     {
@@ -211,7 +211,7 @@ namespace SimpleVending
                 return;
             }
             
-            var prod = machine.GetProductByCode(code);
+            Product? prod = machine.GetProductByCode(code);
             if (prod == null)
             {
                 Console.WriteLine("Товар не найден!");
@@ -283,10 +283,11 @@ namespace SimpleVending
         {
             Console.WriteLine("=== СБРОС СТАТИСТИКИ ===");
             Console.Write("Вы уверены? (да/нет): ");
-            string answer = Console.ReadLine();
+            string? answer = Console.ReadLine();
             
-            if (answer.ToLower() == "да" || answer.ToLower() == "yes")
+            if (answer != null && (answer.ToLower() == "да" || answer.ToLower() == "yes"))
             {
+                // TODO: Вызвать метод сброса статистики у VendingMachine
                 machine.ResetDailyStats();
                 Console.WriteLine("Статистика сброшена");
             }
@@ -311,7 +312,7 @@ namespace SimpleVending
                 Console.WriteLine("4. Выход");
                 Console.Write("Выберите: ");
                 
-                string choice = Console.ReadLine();
+                string? choice = Console.ReadLine();
                 
                 switch (choice)
                 {

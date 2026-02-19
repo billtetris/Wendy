@@ -104,11 +104,19 @@ namespace SimpleVending
                 .ToList();
         }
         
+        // ДОПОЛНИТЕЛЬНЫЙ МЕТОД (не в TODO, но нужен для работы VendingMenu)
+        public List<Product> GetAllProducts()
+        {
+            return products.Values
+                .OrderBy(p => p.Code)
+                .ToList();
+        }
+        
         // TODO 3: Реализовать метод получения отчета
         public (decimal revenue, int soldItems) GetDailyReport()
         {
             // Вернуть кортеж с выручкой (dailyRevenue) и количеством продаж (dailySalesCount)
-            return (dailyRevenue, dailySalesCount); // Получение дневного отчета
+            return (dailyRevenue, dailySalesCount);
         }
         
         // TODO 1: Реализовать метод пополнения товара
@@ -128,6 +136,13 @@ namespace SimpleVending
             return false;
         }
         
+        // ДОПОЛНИТЕЛЬНЫЙ МЕТОД (не в TODO, но нужен для работы VendingMenu)
+        public void ResetDailyStats()
+        {
+            dailyRevenue = 0;
+            dailySalesCount = 0;
+        }
+        
         // Готовый метод инициализации (не менять)
         public void InitializeProducts()
         {
@@ -140,10 +155,14 @@ namespace SimpleVending
         }
         
         // Готовый метод (не менять)
-        public Product GetProductByCode(int code)
+        public Product? GetProductByCode(int code)
         {
             // ВАЖНО: студент должен реализовать словарь products
             // и этот метод будет работать только после этого
+            if (products.ContainsKey(code))
+            {
+                return products[code];
+            }
             return null;
         }
     }
