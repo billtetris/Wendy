@@ -57,6 +57,48 @@ namespace SimpleVending
             // 6. Вызвать machine.BuyProduct() с кодом и суммой
             // 7. Получить результат (успех/неудача, сдача, сообщение)
             // 8. Вывести сообщение и сдачу если есть
+                        
+            ShowProducts();
+            
+            if (machine.GetAvailableProducts().Count == 0)
+            {
+                Console.WriteLine("Нет доступных товаров для покупки!");
+                return;
+            }
+            
+            Console.Write("\nВведите код товара: ");
+            if (!int.TryParse(Console.ReadLine(), out int code))
+            {
+                Console.WriteLine("Неверный формат кода!");
+                return;
+            }
+            
+            var product = machine.GetProductByCode(code);
+            if (product == null)
+            {
+                Console.WriteLine("Товар не найден!");
+                return;
+            }
+            
+            Console.WriteLine($"Товар: {product.Name}");
+            Console.WriteLine($"Цена: {product.Price} руб.");
+            
+            Console.Write("Внесите деньги: ");
+            if (!decimal.TryParse(Console.ReadLine(), out decimal money))
+            {
+                Console.WriteLine("Неверный формат суммы!");
+                return;
+            }
+            
+            var result = machine.BuyProduct(code, money);
+            
+            Console.WriteLine($"\n{result.message}");
+            
+            if (result.success)
+            {
+                Console.WriteLine($"Сдача: {result.change} руб.");
+                Console.WriteLine($"Заберите ваш {product.Name}!");
+            }
         }
         
         // TODO 3: Реализовать меню администратора
