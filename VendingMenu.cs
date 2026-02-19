@@ -107,7 +107,7 @@ namespace SimpleVending
             Console.Write("Введите пароль: ");
             string password = Console.ReadLine();
             
-            if (password == "1234") // Простой пароль для демонстрации
+            if (password == "1234")
             {
                 bool adminRunning = true;
                 
@@ -156,6 +156,8 @@ namespace SimpleVending
             else
             {
                 Console.WriteLine("Неверный пароль!");
+                Console.WriteLine("\nНажмите Enter...");
+                Console.ReadLine();
             }
         }
         
@@ -168,6 +170,21 @@ namespace SimpleVending
             // Вывести: "Выручка: {сумма} руб."
             // Вывести: "Продано товаров: {количество}"
             // Вывести средний чек (выручка / количество продаж)
+
+            var report = machine.GetDailyReport();
+            
+            Console.WriteLine($"Выручка: {report.revenue} руб.");
+            Console.WriteLine($"Продано товаров: {report.soldItems} шт.");
+            
+            if (report.soldItems > 0)
+            {
+                decimal averageCheck = report.revenue / report.soldItems;
+                Console.WriteLine($"Средний чек: {averageCheck:F2} руб.");
+            }
+            else
+            {
+                Console.WriteLine("Средний чек: 0 руб. (нет продаж)");
+            }
         }
         
         // TODO 3: Пополнить товары
@@ -180,6 +197,43 @@ namespace SimpleVending
             // 3. Попросить ввести количество для пополнения
             // 4. Вызвать machine.RestockProduct()
             // 5. Сообщить о результате
+       
+            Console.WriteLine("Доступные товары:");
+            foreach (var p in machine.GetAllProducts())
+            {
+                Console.WriteLine($"{p.Code}. {p.Name} - Текущий остаток: {p.Quantity} шт.");
+            }
+            
+            Console.Write("\nВведите код товара для пополнения: ");
+            if (!int.TryParse(Console.ReadLine(), out int code))
+            {
+                Console.WriteLine("Неверный формат кода!");
+                return;
+            }
+            
+            var prod = machine.GetProductByCode(code);
+            if (prod == null)
+            {
+                Console.WriteLine("Товар не найден!");
+                return;
+            }
+            
+            Console.Write("Введите количество для добавления: ");
+            if (!int.TryParse(Console.ReadLine(), out int quantity) || quantity <= 0)
+            {
+                Console.WriteLine("Неверное количество!");
+                return;
+            }
+            
+            if (machine.RestockProduct(code, quantity))
+            {
+                Console.WriteLine($"Товар '{prod.Name}' пополнен на {quantity} шт.");
+                Console.WriteLine($"Новый остаток: {prod.Quantity} шт.");
+            }
+            else
+            {
+                Console.WriteLine("Ошибка при пополнении товара!");
+            }
         }
         
         // TODO 3: Проверить все товары
@@ -192,6 +246,36 @@ namespace SimpleVending
             // - Код, название, цену, остаток
             // - Срок годности
             // - Статус (норма, скоро истечет, просрочен)
+
+            Console.WriteLine("Код | Название | Цена | Остаток | Срок годности | Статус");
+            Console.WriteLine("----------------------------------------------------------------------");
+            
+            foreach (var p in machine.GetAllProducts())
+            {
+                string status;
+                ConsoleColor originalColor = Console.ForegroundColor;
+                
+                if (p.IsExpired())
+                {
+                    status = "ПРОСРОЧЕН!";
+                    Console.ForegroundColor = ConsoleColor.Red;
+                }
+                else if (p.IsExpiringSoon())
+                {
+                    int daysLeft = (int)(p.ExpiryDate - DateTime.Now).TotalDays;
+                    status = $"Скоро (осталось {daysLeft} дн.)";
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                }
+                else
+                {
+                    int daysLeft = (int)(p.ExpiryDate - DateTime.Now).TotalDays;
+                    status = $"Годен (еще {daysLeft} дн.)";
+                    Console.ForegroundColor = ConsoleColor.Green;
+                }
+                
+                Console.WriteLine($"{p.Code,3} | {p.Name,-15} | {p.Price,5} руб. | {p.Quantity,4} шт. | {p.ExpiryDate:dd.MM.yyyy} | {status}");
+                Console.ForegroundColor = originalColor;
+            }
         }
         
         // TODO 3: Сбросить дневную статистику
@@ -201,11 +285,14 @@ namespace SimpleVending
             Console.Write("Вы уверены? (да/нет): ");
             string answer = Console.ReadLine();
             
-            if (answer.ToLower() == "да")
+            if (answer.ToLower() == "да" || answer.ToLower() == "yes")
             {
-                // Сбросить dailyRevenue и dailySalesCount
-                // Подсказка: нужно добавить метод ResetDailyStats() в VendingMachine
+                machine.ResetDailyStats();
                 Console.WriteLine("Статистика сброшена");
+            }
+            else
+            {
+                Console.WriteLine("Сброс отменен");
             }
         }
         
