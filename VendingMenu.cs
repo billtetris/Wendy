@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SimpleVending
 {
@@ -28,6 +29,19 @@ namespace SimpleVending
             // Для каждого товара вывести строку:
             // "{код}. {название} - {цена} руб. ({остаток} шт.)"
             // Использовать ToString() из класса Product
+
+            var products = machine.GetAvailableProducts();
+            
+            if (products.Count == 0)
+            {
+                Console.WriteLine("Нет доступных товаров!");
+                return;
+            }
+            
+            foreach (var product in products)
+            {
+                Console.WriteLine(product.ToString());
+            }
         }
         
         // TODO 2: Реализовать процесс покупки
