@@ -39,6 +39,11 @@ namespace SimpleVending
             //   - Вернуть true (продажа успешна)
             // Иначе:
             //   - Вернуть false (продажа не удалась)
+            if (!IsExpired() && Quantity > 0)
+            {
+                Quantity--; // Продажа одной единицы
+                return true;
+            }
             return false;
         }
         
