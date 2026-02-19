@@ -5,13 +5,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SimpleVending
 {
     public class VendingMachine
     {
         // TODO 1: Создать словарь для хранения товаров
-        // private Dictionary<int, Product> products = new Dictionary<int, Product>();
+        private Dictionary<int, Product> products = new Dictionary<int, Product>();
         
         private decimal cashBalance = 5000;    // Деньги в аппарате
         private decimal dailyRevenue = 0;      // Выручка за день
@@ -22,6 +23,14 @@ namespace SimpleVending
         {
             // Добавить товар в словарь products
             // Использовать Code товара как ключ
+            if (products.ContainsKey(product.Code))
+            {
+                products[product.Code] = product;
+            }
+            else
+            {
+                products.Add(product.Code, product); // Добавление товара
+            }
         }
         
         // TODO 2: Реализовать метод покупки
@@ -52,7 +61,10 @@ namespace SimpleVending
             // - Количество > 0
             // - Не просрочен
             // Если оба условия верны - добавить товар в список available
-            return available;
+            return products.Values
+                .Where(p => p.Quantity > 0 && !p.IsExpired())
+                .OrderBy(p => p.Code)
+                .ToList();
         }
         
         // TODO 3: Реализовать метод получения отчета
@@ -71,6 +83,11 @@ namespace SimpleVending
             //   - Вернуть true
             // Если не найден:
             //   - Вернуть false
+            if (products.ContainsKey(code))
+            {
+                products[code].Quantity += quantity;
+                return true;
+            }
             return false;
         }
         
