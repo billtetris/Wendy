@@ -52,7 +52,19 @@ namespace SimpleVending
         {
             // Вернуть строку в формате: "A1: Вода 0.5л - 80 руб. (5 шт.)"
             // Добавить информацию о сроке годности если он близок к истечению
-            return "";
+            string expiryStatus = "";
+            
+            if (IsExpired())
+            {
+                expiryStatus = " [ПРОСРОЧЕН!]";
+            }
+            else if (IsExpiringSoon())
+            {
+                int daysLeft = (int)(ExpiryDate - DateTime.Now).TotalDays;
+                expiryStatus = $" [СКОРО: {daysLeft} дн.]";
+            }
+            
+            return $"{Code}. {Name} - {Price} руб. ({Quantity} шт.){expiryStatus}"; // Переопределение ToString()
         }
         
         // TODO 1: Реализовать метод проверки срока годности
