@@ -12,3 +12,4 @@ C:\Users\billtetris\Desktop\Origin\obj\Debug\net10.0\refint\program.dll
 C:\Users\billtetris\Desktop\Origin\obj\Debug\net10.0\program.pdb
 C:\Users\billtetris\Desktop\Origin\obj\Debug\net10.0\program.genruntimeconfig.cache
 C:\Users\billtetris\Desktop\Origin\obj\Debug\net10.0\ref\program.dll
+C:\Users\billtetris\Desktop\Origin\obj\Debug\net10.0\program.sourcelink.json

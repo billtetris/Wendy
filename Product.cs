@@ -26,6 +26,7 @@ namespace SimpleVending
             Category = category;
             
             // TODO 1: Установить срок годности (например, +30 дней от текущей даты)
+            ExpiryDate = DateTime.Now.AddDays(30); // Срок годности +30 дней от текущей даты
         }
         
         // TODO 2: Реализовать метод Sell()
@@ -54,7 +55,7 @@ namespace SimpleVending
         {
             // Сравнить ExpiryDate с текущей датой (DateTime.Now)
             // Вернуть true если товар просрочен
-            return false;
+            return DateTime.Now > ExpiryDate; // Проверка просрочки
         }
         
         // TODO 1: Реализовать метод проверки, что срок годности истекает скоро
@@ -63,7 +64,7 @@ namespace SimpleVending
             // Проверить что до истечения срока годности осталось меньше daysThreshold дней
             // Но товар еще не просрочен
             // Вернуть true если скоро истекает
-            return false;
+            return !IsExpired() && (ExpiryDate - DateTime.Now).TotalDays <= daysThreshold; // Проверка что скоро истекает
         }
     }
 }
