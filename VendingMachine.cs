@@ -47,8 +47,45 @@ namespace SimpleVending
             //    - Увеличить dailySalesCount на 1
             //    - Рассчитать сдачу
             //    - Вернуть (true, сдача, "Покупка успешна")
+
+            // Проверка наличия товара
+            if (!products.ContainsKey(productCode))
+            {
+                return (false, moneyInserted, "Товар не найден");
+            }
             
-            return (false, moneyInserted, "");
+            Product product = products[productCode];
+            
+            // Проверка остатка
+            if (product.Quantity <= 0)
+            {
+                return (false, moneyInserted, "Товар закончился");
+            }
+            
+            // Проверка срока годности
+            if (product.IsExpired())
+            {
+                return (false, moneyInserted, "Товар просрочен");
+            }
+            
+            // Проверка денег
+            if (moneyInserted < product.Price)
+            {
+                return (false, moneyInserted, $"Недостаточно денег. Нужно {product.Price} руб.");
+            }
+            
+            // Продажа
+            if (product.Sell())
+            {
+                dailyRevenue += product.Price;
+                dailySalesCount++;
+                cashBalance += product.Price;
+                
+                decimal change = moneyInserted - product.Price;
+                return (true, change, "Покупка успешна");
+            }
+            
+            return (false, moneyInserted, "Ошибка при продаже");
         }
         
         // TODO 1: Реализовать метод получения доступных товаров
