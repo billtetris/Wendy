@@ -108,7 +108,7 @@ namespace SimpleVending
         public (decimal revenue, int soldItems) GetDailyReport()
         {
             // Вернуть кортеж с выручкой (dailyRevenue) и количеством продаж (dailySalesCount)
-            return (0, 0);
+            return (dailyRevenue, dailySalesCount); // Получение дневного отчета
         }
         
         // TODO 1: Реализовать метод пополнения товара
